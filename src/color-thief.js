@@ -1,4 +1,4 @@
-import quantize from '../node_modules/quantize/dist/index.mjs';
+import quantize from '../node_modules/quantize/quantize.js';
 import core from './core.js';
 
 /*
@@ -89,13 +89,11 @@ ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality) {
     const pixelCount = image.width * image.height;
 
     const pixelArray = core.createPixelArray(imageData.data, pixelCount, options.quality);
-
     // Send array to quantize function which clusters values
     // using median cut algorithm
     const cmap    = quantize(pixelArray, options.colorCount);
     const palette = cmap? cmap.palette() : null;
-
-    return palette;
+    return palette || Array(10).fill([255,255,255])
 };
 
 ColorThief.prototype.getColorFromUrl = function(imageUrl, callback, quality) {
